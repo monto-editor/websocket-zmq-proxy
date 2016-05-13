@@ -18,10 +18,10 @@ public class WebSocketSubscriberProxy extends WebSocketServer {
     private boolean debug;
     private List<WebSocket> webSockets;
     private boolean running;
-	private Object webSocketAddress;
-	private String zmqAddress;
+    private Object webSocketAddress;
+    private String zmqAddress;
 
-    public WebSocketSubscriberProxy(InetSocketAddress webSocketAddress,String zmqAddress, ZContext context, boolean debug) {
+    public WebSocketSubscriberProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
         super(webSocketAddress);
         this.context = context;
         this.webSocketAddress = webSocketAddress;
@@ -34,7 +34,7 @@ public class WebSocketSubscriberProxy extends WebSocketServer {
     private void connect(String address) {
         socket = context.createSocket(ZMQ.SUB);
         socket.connect(address);
-        socket.subscribe(new byte[] {});
+        socket.subscribe(new byte[]{});
     }
 
     @Override
@@ -65,8 +65,8 @@ public class WebSocketSubscriberProxy extends WebSocketServer {
             String msg = socket.recvStr();
             if (webSockets.size() > 0 && msg != null) {
                 for (WebSocket webSocket : webSockets) {
-                	if(debug)
-                		System.out.printf("zmq %s -> websocket %s: %s\n", zmqAddress, webSocketAddress, msg);
+                    if (debug)
+                        System.out.printf("zmq %s -> websocket %s: %s\n", zmqAddress, webSocketAddress, msg);
                     webSocket.send(msg);
                 }
             }

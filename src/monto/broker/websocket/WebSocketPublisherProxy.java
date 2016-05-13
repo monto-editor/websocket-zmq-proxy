@@ -1,7 +1,5 @@
 package monto.broker.websocket;
 
-import java.net.InetSocketAddress;
-
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
@@ -9,13 +7,15 @@ import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
 
+import java.net.InetSocketAddress;
+
 public class WebSocketPublisherProxy extends WebSocketServer {
 
     private ZContext context;
     private boolean debug;
     private Socket socket;
-	private InetSocketAddress webSocketAddress;
-	private String zmqAddress;
+    private InetSocketAddress webSocketAddress;
+    private String zmqAddress;
 
     public WebSocketPublisherProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
         super(webSocketAddress);
@@ -43,8 +43,8 @@ public class WebSocketPublisherProxy extends WebSocketServer {
 
     @Override
     public void onMessage(WebSocket webSocket, String s) {
-        if(debug)
-        	System.out.printf("websocket %s -> zmq %s: %s\n", webSocketAddress, zmqAddress, s);
+        if (debug)
+            System.out.printf("websocket %s -> zmq %s: %s\n", webSocketAddress, zmqAddress, s);
         socket.send(s);
     }
 

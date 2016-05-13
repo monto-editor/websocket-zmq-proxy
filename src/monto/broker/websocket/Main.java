@@ -12,10 +12,10 @@ public class Main {
 
     public static void main(String[] args) throws ParseException {
         options.addOption("source", true, "set zeromq source address")
-               .addOption("sink", true, "set zeromq sink address")
-               .addOption("discovery", true, "set zeromq discovery address")
-               .addOption("configuration", true, "set zeromq configuration address")
-               .addOption("debug", false, "enables debug output");
+                .addOption("sink", true, "set zeromq sink address")
+                .addOption("discovery", true, "set zeromq discovery address")
+                .addOption("configuration", true, "set zeromq configuration address")
+                .addOption("debug", false, "enables debug output");
 
         String srcAddress = null;
         String snkAddress = null;
@@ -48,11 +48,11 @@ public class Main {
         } else {
             exit();
         }
-        
+
         boolean debug = cmd.hasOption("debug");
 
         ZContext context = new ZContext(1);
-        Thread wsd =  new Thread(new WebSocketRequestProxy(new InetSocketAddress(5006), discAddress, context, debug));
+        Thread wsd = new Thread(new WebSocketRequestProxy(new InetSocketAddress(5006), discAddress, context, debug));
         wsd.start();
         Thread wsc = new Thread(new WebSocketPublisherProxy(new InetSocketAddress(5008), configAddress, context, debug));
         wsc.start();
