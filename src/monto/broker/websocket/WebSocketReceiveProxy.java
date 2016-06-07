@@ -11,7 +11,7 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-public class WebSocketSubscriberProxy extends WebSocketServer {
+public class WebSocketReceiveProxy extends WebSocketServer {
 
     private ZContext context;
     private ZMQ.Socket socket;
@@ -21,7 +21,7 @@ public class WebSocketSubscriberProxy extends WebSocketServer {
     private Object webSocketAddress;
     private String zmqAddress;
 
-    public WebSocketSubscriberProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
+    public WebSocketReceiveProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
         super(webSocketAddress);
         this.context = context;
         this.webSocketAddress = webSocketAddress;
@@ -32,9 +32,8 @@ public class WebSocketSubscriberProxy extends WebSocketServer {
     }
 
     private void connect(String address) {
-        socket = context.createSocket(ZMQ.SUB);
+        socket = context.createSocket(ZMQ.PAIR);
         socket.connect(address);
-        socket.subscribe(new byte[]{});
     }
 
     @Override

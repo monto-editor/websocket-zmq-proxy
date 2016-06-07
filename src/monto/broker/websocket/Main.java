@@ -13,14 +13,10 @@ public class Main {
     public static void main(String[] args) throws ParseException {
         options.addOption("source", true, "set zeromq source address")
                 .addOption("sink", true, "set zeromq sink address")
-                .addOption("discovery", true, "set zeromq discovery address")
-                .addOption("configuration", true, "set zeromq configuration address")
                 .addOption("debug", false, "enables debug output");
 
         String srcAddress = null;
         String snkAddress = null;
-        String discAddress = null;
-        String configAddress = null;
 
         CommandLineParser parser = new DefaultParser();
         CommandLine cmd = parser.parse(options, args);
@@ -37,29 +33,13 @@ public class Main {
             exit();
         }
 
-        if (cmd.hasOption("discovery")) {
-            discAddress = cmd.getOptionValue("discovery");
-        } else {
-            exit();
-        }
-
-        if (cmd.hasOption("configuration")) {
-            configAddress = cmd.getOptionValue("configuration");
-        } else {
-            exit();
-        }
-
         boolean debug = cmd.hasOption("debug");
 
         ZContext context = new ZContext(1);
-        Thread wsd = new Thread(new WebSocketRequestProxy(new InetSocketAddress(5006), discAddress, context, debug));
+        Thread wsd = new Thread(new WebSocketSendProxy(new InetSocketAddress(5003), srcAddress, context, debug));
         wsd.start();
-        Thread wsc = new Thread(new WebSocketPublisherProxy(new InetSocketAddress(5008), configAddress, context, debug));
+        Thread wsc = new Thread(new WebSocketReceiveProxy(new InetSocketAddress(5004), snkAddress, context, debug));
         wsc.start();
-        Thread wsp = new Thread(new WebSocketPublisherProxy(new InetSocketAddress(5002), srcAddress, context, debug));
-        wsp.start();
-        WebSocketSubscriberProxy wss = new WebSocketSubscriberProxy(new InetSocketAddress(5003), snkAddress, context, debug);
-        wss.start();
     }
 
     private static void exit() {

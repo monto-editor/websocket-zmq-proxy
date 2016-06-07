@@ -9,15 +9,15 @@ import org.zeromq.ZMQ.Socket;
 
 import java.net.InetSocketAddress;
 
-public class WebSocketRequestProxy extends WebSocketServer {
+public class WebSocketSendProxy extends WebSocketServer {
 
     private ZContext context;
-    private Socket socket;
     private boolean debug;
+    private Socket socket;
     private InetSocketAddress webSocketAddress;
     private String zmqAddress;
 
-    public WebSocketRequestProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
+    public WebSocketSendProxy(InetSocketAddress webSocketAddress, String zmqAddress, ZContext context, boolean debug) {
         super(webSocketAddress);
         this.webSocketAddress = webSocketAddress;
         this.zmqAddress = zmqAddress;
@@ -27,7 +27,7 @@ public class WebSocketRequestProxy extends WebSocketServer {
     }
 
     private void connect(String address) {
-        socket = context.createSocket(ZMQ.REQ);
+        socket = context.createSocket(ZMQ.PAIR);
         socket.connect(address);
     }
 
@@ -46,10 +46,6 @@ public class WebSocketRequestProxy extends WebSocketServer {
         if (debug)
             System.out.printf("websocket %s -> zmq %s: %s\n", webSocketAddress, zmqAddress, s);
         socket.send(s);
-        String msg = socket.recvStr();
-        webSocket.send(msg);
-        if (debug)
-            System.out.printf("zmq %s -> websocket %s: %s\n", zmqAddress, webSocketAddress, msg);
     }
 
     @Override
