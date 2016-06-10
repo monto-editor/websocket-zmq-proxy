@@ -17,6 +17,4 @@ fi
 java -jar "$jar" \
      -source tcp://*:5000 \
      -sink tcp://*:5001 \
-     -discovery tcp://*:5005 \
-     -configuration tcp://*:5007 \
      -debug
