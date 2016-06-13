@@ -2,6 +2,8 @@ package monto.broker.websocket;
 
 import org.apache.commons.cli.*;
 import org.zeromq.ZContext;
+import org.zeromq.ZMQ;
+import org.zeromq.ZMQ.Socket;
 
 import java.net.InetSocketAddress;
 
@@ -10,7 +12,7 @@ public class Main {
     private static Options options = new Options();
     private static HelpFormatter hf = new HelpFormatter();
 
-    public static void main(String[] args) throws ParseException {
+    public static void main(String[] args) throws ParseException, InterruptedException {
         options.addOption("source", true, "set zeromq source address")
                 .addOption("sink", true, "set zeromq sink address")
                 .addOption("debug", false, "enables debug output");
@@ -36,10 +38,10 @@ public class Main {
         boolean debug = cmd.hasOption("debug");
 
         ZContext context = new ZContext(1);
-        Thread wsd = new Thread(new WebSocketSendProxy(new InetSocketAddress(5003), srcAddress, context, debug));
+        Thread wsd = new Thread(new WebSocketSendProxy(new InetSocketAddress(5003), srcAddress, context, debug), "send-proxy");
         wsd.start();
-        Thread wsc = new Thread(new WebSocketReceiveProxy(new InetSocketAddress(5004), snkAddress, context, debug));
-        wsc.start();
+        WebSocketReceiveProxy receiver = new WebSocketReceiveProxy(new InetSocketAddress(5004), snkAddress, context, debug);
+        receiver.start();
     }
 
     private static void exit() {

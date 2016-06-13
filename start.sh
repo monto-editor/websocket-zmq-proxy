@@ -15,6 +15,5 @@ else
 fi
 
 java -jar "$jar" \
-     -source tcp://*:5000 \
-     -sink tcp://*:5001 \
-     -debug
+     -source tcp://localhost:5000 \
+     -sink tcp://localhost:5001

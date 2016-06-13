@@ -29,6 +29,7 @@ public class WebSocketSendProxy extends WebSocketServer {
     private void connect(String address) {
         socket = context.createSocket(ZMQ.PAIR);
         socket.connect(address);
+        System.out.printf("send proxy: %s -> %s\n", webSocketAddress,address);
     }
 
     @Override

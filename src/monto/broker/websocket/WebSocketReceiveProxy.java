@@ -1,15 +1,15 @@
 package monto.broker.websocket;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
-
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.util.ArrayList;
-import java.util.List;
 
 public class WebSocketReceiveProxy extends WebSocketServer {
 
@@ -34,6 +34,7 @@ public class WebSocketReceiveProxy extends WebSocketServer {
     private void connect(String address) {
         socket = context.createSocket(ZMQ.PAIR);
         socket.connect(address);
+        System.out.printf("receive proxy: %s -> %s\n", address,webSocketAddress);
     }
 
     @Override
@@ -58,25 +59,21 @@ public class WebSocketReceiveProxy extends WebSocketServer {
 
     @Override
     public void start() {
-        super.start();
-        running = true;
-        while (running) {
-            String msg = socket.recvStr();
-            if (webSockets.size() > 0 && msg != null) {
-                for (WebSocket webSocket : webSockets) {
-                    if (debug)
-                        System.out.printf("zmq %s -> websocket %s: %s\n", zmqAddress, webSocketAddress, msg);
-                    webSocket.send(msg);
-                }
-            }
-            try {
-                Thread.sleep(1);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
+    	super.start();
+		running = true;
+		while (running) {
+			String msg = socket.recvStr();
+			if (webSockets.size() > 0 && msg != null) {
+				for (WebSocket webSocket : webSockets) {
+					if (debug)
+						System.out.printf("zmq %s -> websocket %s: %s\n",
+								zmqAddress, webSocketAddress, msg);
+					webSocket.send(msg);
+				}
+			}
+		}
     }
-
+    
     @Override
     public void stop() throws IOException, InterruptedException {
         super.stop();
