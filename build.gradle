@@ -1,25 +1,29 @@
-apply plugin: 'java'
-sourceCompatibility = 1.8
-
-sourceSets {
-    main {
-        java {
-            srcDir 'src'
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
         }
     }
+    dependencies {
+        classpath "com.github.jengelman.gradle.plugins:shadow:1.2.3"
+    }
 }
 
-jar {
-    from {
-        configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    manifest {
-        attributes('Main-Class': 'monto.broker.websocket.Main')
-    }
-}
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = "monto"
+
+sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
+}
+
+jar {
+    manifest {
+        attributes('Main-Class': 'monto.broker.websocket.Main')
+    }
 }
 
 dependencies {
