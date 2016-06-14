@@ -2,18 +2,13 @@
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-eclipse_jar="$DIR/dist/websocket-zmq-proxy.jar"
-gradle_jar="$DIR/build/libs/websocket-zmq-proxy.jar"
+gradle_shadow_jar="$DIR/build/libs/websocket-zmq-proxy-all.jar"
 
-if [ -f "$eclipse_jar" ]; then
-    jar="$eclipse_jar"
-elif [ -f "$gradle_jar" ]; then
-    jar="$gradle_jar"
-else
+if [ ! -f "$gradle_shadow_jar" ]; then
     printf "No jar found. Please build the project first.\n" >&2
     exit 99
 fi
 
-java -jar "$jar" \
+java -jar "$gradle_shadow_jar" \
      -source tcp://localhost:5000 \
      -sink tcp://localhost:5001
