@@ -1,13 +1,12 @@
 package monto.broker.websocket;
 
+import java.net.InetSocketAddress;
 import org.java_websocket.WebSocket;
 import org.java_websocket.handshake.ClientHandshake;
 import org.java_websocket.server.WebSocketServer;
 import org.zeromq.ZContext;
 import org.zeromq.ZMQ;
 import org.zeromq.ZMQ.Socket;
-
-import java.net.InetSocketAddress;
 
 public class WebSocketSendProxy extends WebSocketServer {
 

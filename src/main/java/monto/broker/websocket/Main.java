@@ -1,5 +1,6 @@
 package monto.broker.websocket;
 
+import java.net.InetSocketAddress;
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.CommandLineParser;
 import org.apache.commons.cli.DefaultParser;
@@ -7,8 +8,6 @@ import org.apache.commons.cli.HelpFormatter;
 import org.apache.commons.cli.Options;
 import org.apache.commons.cli.ParseException;
 import org.zeromq.ZContext;
-
-import java.net.InetSocketAddress;
 
 public class Main {
 
